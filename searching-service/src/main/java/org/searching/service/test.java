@@ -9,13 +9,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.searching.service.impl.SearchingQuatzJob;
 import org.searching.util.DateUtil;
 import org.searching.util.HttpClientUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class test {
+	
 
 	public static void main(String[] args) {
-		System.out.println();
 		/*String[] array = HttpClientUtil.getCookies("http://housing.icho.osaka-u.ac.jp/dormitory/search");
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
     	nameValuePairs.add(new BasicNameValuePair("start_date", "2019-03-01"));

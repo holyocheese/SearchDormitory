@@ -1,4 +1,4 @@
-package org.searching.service;
+package org.searching.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,16 +14,18 @@ import org.searching.util.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Service
 public class ScheduledService {
 	@Value("${constants.housing-url}")
 	private static String url;
 	
-	@Scheduled(cron = "0 0/15 * * * *")
+	//@Scheduled(cron = "0 0/15 * * * *")
     public void scheduled() throws Exception{
     	searching();
         log.info("=====>>>>>使用cron  {}",System.currentTimeMillis());
@@ -46,7 +48,7 @@ public class ScheduledService {
         	result = pElement.html();
         	log.info("=====>>>>>查询情况  {}",result);
     	}	
-    	SendSimpleMail.test2("宿舍查询情况" + "  " +  DateUtil.dateFmtToString(new Date()),result);
+    	SendSimpleMail.sendMail("宿舍查询情况" + "  " +  DateUtil.dateFmtToString(new Date()),result);
     	return "";
     }
     

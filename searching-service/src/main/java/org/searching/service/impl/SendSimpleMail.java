@@ -1,4 +1,4 @@
-package org.searching.service;
+package org.searching.service.impl;
  
 import java.util.Date;
 import java.util.Properties;
@@ -48,7 +48,7 @@ public class SendSimpleMail {
 		}
 	}
  
-	public static void test2(String title,String text) throws AddressException, MessagingException {
+	public static void sendMail(String title,String text) throws AddressException, MessagingException {
 		// 创建邮件会话
 		Session session = Session.getInstance(props);
 		// 创建邮件对象
