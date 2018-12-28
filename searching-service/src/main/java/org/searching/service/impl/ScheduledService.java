@@ -47,8 +47,12 @@ public class ScheduledService {
     	String result = "有丶问题";
     	//html解析
     	if(doc!=null){
-    		Element pElement = doc.getElementsByClass("note").get(0);
-        	result = pElement.html();
+    		try {
+    			Element pElement = doc.getElementsByClass("note").get(0);
+            	result = pElement.html();
+			} catch (Exception e) {
+				SendSimpleMail.sendMail("宿舍查询情况 error" + "  " +  DateUtil.dateFmtToString(new Date()),e.getMessage());
+			}
         	/*String jsonObj = JSONObject.toJSONString(dataMap);
         	log.info("=====>>>>>查询参数  {}",dataMap.toString());*/
         	log.info("=====>>>>>查询情况  {}",result);

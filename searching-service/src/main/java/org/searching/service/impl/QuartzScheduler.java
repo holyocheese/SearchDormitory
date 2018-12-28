@@ -11,6 +11,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.searching.service.entity.CronRequest;
 import org.searching.service.entity.SearchOsakaRequest;
 import org.searching.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +50,15 @@ public class QuartzScheduler {
      * @return
      * @throws SchedulerException
      */
-    public String getJobInfo(String name, String group) throws SchedulerException {
+    public CronRequest getJobInfo(String name, String group) throws SchedulerException {
         TriggerKey triggerKey = new TriggerKey(name, group);
         CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         if(cronTrigger!=null){
-        	return String.format("time:%s,state:%s", cronTrigger.getCronExpression(),
-                    scheduler.getTriggerState(triggerKey).name()); 
+        	CronRequest cronRequest = new CronRequest();
+        	cronRequest.setCron(cronTrigger.getCronExpression());
+        	cronRequest.setName(name);
+        	cronRequest.setGroup(group);
+        	return cronRequest;
         }else{
         	return null;
         }

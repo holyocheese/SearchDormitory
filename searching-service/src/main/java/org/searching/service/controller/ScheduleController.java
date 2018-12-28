@@ -2,6 +2,7 @@ package org.searching.service.controller;
 
 import org.quartz.ObjectAlreadyExistsException;
 import org.quartz.SchedulerException;
+import org.searching.service.entity.CronRequest;
 import org.searching.service.entity.SearchOsakaRequest;
 import org.searching.service.impl.QuartzScheduler;
 import org.searching.util.MessageCodeUtil;
@@ -47,10 +48,42 @@ public class ScheduleController {
 	
 	//获取某个定时任务的详情
 	@RequestMapping(value="/quartzInfo",method = RequestMethod.GET)
-	public MsgVo<String> quartzInfo(@RequestParam(value="name")String name,@RequestParam(value="group")String group){
-		MsgVo<String> msgVo = new MsgVo<String>();
+	public MsgVo<CronRequest> quartzInfo(@RequestParam(value="name")String name,@RequestParam(value="group")String group){
+		MsgVo<CronRequest> msgVo = new MsgVo<CronRequest>();
 		try {
 			msgVo.setData(quartzScheduler.getJobInfo(name, group));
+			msgVo.setMessage(MessageCodeUtil.MESSAGE_OK);
+			msgVo.setStatus(MessageCodeUtil.SUCCESS);
+		} catch (SchedulerException e) {
+			msgVo.setMessage(MessageCodeUtil.MESSAGE_500);
+			msgVo.setStatus(MessageCodeUtil.SERVER_500);
+			e.printStackTrace();
+		}
+		return msgVo;
+	}
+	
+	//停止某个定时任务
+	@RequestMapping(value="/stop",method = RequestMethod.GET)
+	public MsgVo<CronRequest> stopQuartz(@RequestParam(value="name")String name,@RequestParam(value="group")String group){
+		MsgVo<CronRequest> msgVo = new MsgVo<CronRequest>();
+		try {
+			quartzScheduler.pauseJob(name, group);
+			msgVo.setMessage(MessageCodeUtil.MESSAGE_OK);
+			msgVo.setStatus(MessageCodeUtil.SUCCESS);
+		} catch (SchedulerException e) {
+			msgVo.setMessage(MessageCodeUtil.MESSAGE_500);
+			msgVo.setStatus(MessageCodeUtil.SERVER_500);
+			e.printStackTrace();
+		}
+		return msgVo;
+	}
+	
+	//恢复某个定时任务
+	@RequestMapping(value="/resume",method = RequestMethod.GET)
+	public MsgVo<CronRequest> resumeQuartz(@RequestParam(value="name")String name,@RequestParam(value="group")String group){
+		MsgVo<CronRequest> msgVo = new MsgVo<CronRequest>();
+		try {
+			quartzScheduler.resumeJob(name, group);
 			msgVo.setMessage(MessageCodeUtil.MESSAGE_OK);
 			msgVo.setStatus(MessageCodeUtil.SUCCESS);
 		} catch (SchedulerException e) {
