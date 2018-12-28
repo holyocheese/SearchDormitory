@@ -7,9 +7,7 @@
     <artifactId>timer-searching</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.ou.housing</groupId>
   <artifactId>searching-service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <name>searching-service</name>
   <url>http://maven.apache.org</url>
   <properties>
@@ -48,13 +46,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.18</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>RELEASE</version>
@@ -68,12 +59,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.poi</groupId>-->
-        <!--<artifactId>poi-ooxml-schemas</artifactId>-->
-        <!--<version>3.9</version>-->
-        <!--</dependency>-->
-
+        
         <!--邮件-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

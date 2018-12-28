@@ -11,8 +11,11 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.searching.service.entity.SearchOsakaRequest;
+import org.searching.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 /**
  * 任务调度处理
@@ -29,9 +32,12 @@ public class QuartzScheduler {
      * 
      * @throws SchedulerException
      */
-    public void startJob(String cron) throws SchedulerException {
-    	cron = "0/10 * * * * ?";
-        startJob1(scheduler,cron);
+    public void startJob(String cron,SearchOsakaRequest searchOsakaRequest) throws SchedulerException {
+    	//默认十五分钟
+    	if(StringUtils.isEmpty(cron)){
+    		cron =  "0 0/15 * * * *";
+    	}
+        startJob1(scheduler,cron,searchOsakaRequest);
         scheduler.start();
     }
 
@@ -46,8 +52,12 @@ public class QuartzScheduler {
     public String getJobInfo(String name, String group) throws SchedulerException {
         TriggerKey triggerKey = new TriggerKey(name, group);
         CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-        return String.format("time:%s,state:%s", cronTrigger.getCronExpression(),
-                scheduler.getTriggerState(triggerKey).name());
+        if(cronTrigger!=null){
+        	return String.format("time:%s,state:%s", cronTrigger.getCronExpression(),
+                    scheduler.getTriggerState(triggerKey).name()); 
+        }else{
+        	return null;
+        }
     }
 
     /**
@@ -59,13 +69,13 @@ public class QuartzScheduler {
      * @return
      * @throws SchedulerException
      */
-    public boolean modifyJob(String name, String group, String time) throws SchedulerException {
+    public boolean modifyJob(String name, String group, String cron) throws SchedulerException {
         Date date = null;
         TriggerKey triggerKey = new TriggerKey(name, group);
         CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         String oldTime = cronTrigger.getCronExpression();
-        if (!oldTime.equalsIgnoreCase(time)) {
-            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(time);
+        if (!oldTime.equalsIgnoreCase(cron)) {
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(name, group)
                     .withSchedule(cronScheduleBuilder).build();
             date = scheduler.rescheduleJob(triggerKey, trigger);
@@ -136,16 +146,25 @@ public class QuartzScheduler {
         scheduler.deleteJob(jobKey);
     }
 
-    private void startJob1(Scheduler scheduler,String cron) throws SchedulerException {
+    private void startJob1(Scheduler scheduler,String cron,SearchOsakaRequest searchOsakaRequest) throws SchedulerException {
         // 通过JobBuilder构建JobDetail实例，JobDetail规定只能是实现Job接口的实例
         // JobDetail 是具体Job实例
-        JobDetail jobDetail = JobBuilder.newJob(SearchingQuatzJob.class).withIdentity("job1", "group1").build();
+        JobDetail jobDetail = JobBuilder.newJob(SearchingQuatzJob.class)
+        		.withIdentity("job1", "group1")
+        		.usingJobData("start_date", DateUtil.dateFmtToString(searchOsakaRequest.getStartDate(),"yyyy-MM-dd"))
+        		.usingJobData("end_date", DateUtil.dateFmtToString(searchOsakaRequest.getEndDate(),"yyyy-MM-dd"))
+        		.usingJobData("check_suita", searchOsakaRequest.getCheckSuita())
+        		.usingJobData("sex", searchOsakaRequest.getSex())
+        		.usingJobData("number_of_people_capacity", searchOsakaRequest.getNumber())
+        		.build();
         // 基于表达式构建触发器
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
         // CronTrigger表达式触发器 继承于Trigger
         // TriggerBuilder 用于构建触发器实例
-        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("job1", "group1")
-                .withSchedule(cronScheduleBuilder).build();
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger()
+        		.withIdentity("job1", "group1")
+                .withSchedule(cronScheduleBuilder)
+                .build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 

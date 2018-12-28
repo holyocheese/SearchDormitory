@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class SearchOsakaRequest {
+public class SearchOsakaRequest extends CronRequest{
 
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date startDate;
