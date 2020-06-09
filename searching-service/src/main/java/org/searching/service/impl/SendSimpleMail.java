@@ -24,7 +24,7 @@ public class SendSimpleMail {
 	// 发件人的邮箱地址
 	private static String userName = "543296676@qq.com";
 	// 发件人的密码
-	private static String password = "bpzdtgqupkdjbfch"; 
+	private static String password = ""; 
  
 	static {
 		props = new Properties();
