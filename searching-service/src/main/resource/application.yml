@@ -3,6 +3,14 @@ spring:
     name: searching-service
   profiles:
     active: ou
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: root
+    password: test
+  sql:
+    init:
+      schema-locations: classpath:db/schema-h2.sql
+      data-locations: classpath:db/data-h2.sql  
 
 server:
   port: 9999

@@ -4,7 +4,7 @@
   <groupId>com.ou.housing</groupId>
   <artifactId>timer-searching</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>jp</name>
+  <name>searching-parent</name>
   <packaging>pom</packaging>
   <description>定时查询任务</description>
 
@@ -19,19 +19,20 @@
   </build>
   <modules>
     <module>searching-service</module>
+	<module>searching-dao</module>
   </modules>
   
   <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.10.RELEASE</version>
+		<version>2.7.13</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
 	</properties>
 
