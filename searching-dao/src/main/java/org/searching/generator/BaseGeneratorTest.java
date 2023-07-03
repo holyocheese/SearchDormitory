@@ -45,7 +45,7 @@ public class BaseGeneratorTest {
     protected static GlobalConfig.Builder globalConfig() {
         String projectPath = System.getProperty("user.dir");
         System.out.println(projectPath);
-        String daoPath = "\\demo-dao\\src\\main\\java";
+        String daoPath = "\\searching-dao\\src\\main\\java";
         return new GlobalConfig.Builder()
                 .author("ou")
                 .outputDir(projectPath+daoPath);
