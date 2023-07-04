@@ -11,8 +11,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
-import org.searching.service.entity.CronRequest;
-import org.searching.service.entity.SearchOsakaRequest;
+import org.searching.entity.CronRequest;
+import org.searching.entity.SearchOsakaRequest;
 import org.searching.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class QuartzScheduler {
      * 
      * @throws SchedulerException
      */
-    public void startJob(String cron,SearchOsakaRequest searchOsakaRequest) throws SchedulerException {
+    public void startJob(String cron, SearchOsakaRequest searchOsakaRequest) throws SchedulerException {
     	//默认十五分钟
     	if(StringUtils.isEmpty(cron)){
     		cron =  "0 0/15 * * * *";
@@ -69,7 +69,6 @@ public class QuartzScheduler {
      * 
      * @param name
      * @param group
-     * @param time
      * @return
      * @throws SchedulerException
      */
